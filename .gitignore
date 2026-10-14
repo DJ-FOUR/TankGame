@@ -1,0 +1,71 @@
+# ============================================================
+# Unity 工程的 .gitignore
+# 规则：凡是我没写进这里的文件夹，Git 都会尝试收录。
+# 判断标准：「这个文件夹换台电脑能不能自己长出来？」
+#   能 → 忽略掉。不能（那是你的劳动成果）→ 必须提交。
+# ============================================================
+
+# ---- Unity 本机缓存：删了会自动重建，体积巨大，绝不上传 ----
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# ---- 你打包 Build 出来的成品（游戏本体），不属于源码 ----
+/[Bb]uild/
+/[Bb]uilds/
+*.apk
+*.aab
+*.exe
+*.app
+
+# ---- 编辑器个人偏好：窗口布局、上次开的是哪个场景 ----
+/[Uu]ser[Ss]ettings/
+
+# ---- 代码编辑器 / IDE 自动生成的工程文件 ----
+# Unity 每次都会重新生成，版本还和 IDE 绑定，跨电脑传过去只会打架
+/.vs/
+/.vsconfig
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.tmp
+.consulo/
+ExportedObj/
+.sysinfo
+sysinfo.txt
+
+# ---- 上面那些生成文件对应的 .meta，一并忽略 ----
+# 注意：这跟下面那条「.meta 必须提交」不矛盾，这里只针对 pdb/mdb 这类垃圾文件
+*.csproj.meta
+*.unityproj.meta
+*.sln.meta
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# ---- 下载的 .unitypackage 本身（导入后的内容在 Assets 里，不用重复存） ----
+*.unitypackage
+
+# ============================================================
+# ⚠️ 以下这些【绝对不能忽略】，写在这里是提醒你别手滑加进去：
+#
+#   Assets/          你所有的资源、脚本、场景
+#   Assets/**/*.meta  每个资源的 GUID。漏了它 → Missing Script、
+#                     预制体丢脚本、场景里的引用全断，且不可恢复
+#   ProjectSettings/  工程设置：Tag、Layer、物理、Input 轴、
+#                     URP 指定。漏了它 → 换台电脑游戏直接不认输入
+#   Packages/         manifest.json + packages-lock.json，
+#                     记录这工程装了哪些包。漏了它 → 包全丢
+# ============================================================
