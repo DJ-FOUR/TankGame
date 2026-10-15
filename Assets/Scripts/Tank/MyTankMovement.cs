@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 
 public class MyTankMovement : MonoBehaviour
 {
+    public int PlayerNumber = 1;
     public float Speed = 20;
     public float TurnSpeed = 180;
     public AudioSource MovementAudio;
@@ -13,9 +14,6 @@ public class MyTankMovement : MonoBehaviour
     public AudioClip EngineDriving;
     public float PitchRange = 0.2f;
 
-    public GameObject FireTransform;
-    public Rigidbody Shell;
-    public float ShellPower= 10;
 
     private Rigidbody rb;
     private string MovementAxisName;
@@ -33,8 +31,8 @@ public class MyTankMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MovementAxisName = "VerticalUI";
-        TurnAxisName = "HorizontalUI";
+        MovementAxisName = "Vertical"+PlayerNumber;
+        TurnAxisName = "Horizontal"+PlayerNumber;
     }
 
     // Update is called once per frame
@@ -44,17 +42,8 @@ public class MyTankMovement : MonoBehaviour
         Move();
         //A DÐý×ª
         Turn();
-
         //²¥·ÅÉùÒô
         EngineAudio();
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Rigidbody gameObjectInstance= Instantiate(Shell, FireTransform.transform.position,FireTransform.transform.rotation) as Rigidbody;
-            Vector3 fwd= FireTransform.transform.forward;
-            gameObjectInstance.AddForce (fwd*ShellPower);
-        }
-
     }
     private void FixedUpdate()
     {
