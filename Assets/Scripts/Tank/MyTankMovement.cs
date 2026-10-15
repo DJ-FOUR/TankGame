@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
+using UnityEngine.Rendering;
 
 public class MyTankMovement : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class MyTankMovement : MonoBehaviour
     public AudioClip EngineIdling;
     public AudioClip EngineDriving;
     public float PitchRange = 0.2f;
+
+    public GameObject FireTransform;
+    public Rigidbody Shell;
+    public float ShellPower= 10;
 
     private Rigidbody rb;
     private string MovementAxisName;
@@ -41,6 +46,22 @@ public class MyTankMovement : MonoBehaviour
         Turn();
 
         //播放声音
+        EngineAudio();
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Rigidbody gameObjectInstance= Instantiate(Shell, FireTransform.transform.position,FireTransform.transform.rotation) as Rigidbody;
+            Vector3 fwd= FireTransform.transform.forward;
+            gameObjectInstance.AddForce (fwd*ShellPower);
+        }
+
+    }
+    private void FixedUpdate()
+    {
+        
+    }
+    void EngineAudio()
+    {
         if (Mathf.Abs(MovementInputValue) < 0.01 && Mathf.Abs(TurnInputValue) < 0.01) //坦克不动
         {
             if (MovementAudio.clip == EngineDriving)
@@ -58,15 +79,6 @@ public class MyTankMovement : MonoBehaviour
                 MovementAudio.Play();
             }
         }
-
-    }
-    private void FixedUpdate()
-    {
-        
-    }
-    void EngineAudio()
-    {
-
     }
     void Move()
     {
