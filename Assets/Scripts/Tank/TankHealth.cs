@@ -4,15 +4,12 @@ using UnityEngine.UI;
 public class TankHealth : MonoBehaviour
 {
     public float m_StartingHealth = 100f;          //初始血量
-
+    public GameObject m_ExplosionPrefab;            //爆炸预制体
     //UI控件
     public Slider m_Slider;                        
-    public Image m_FillImage;                      
-    public Color m_FullHealthColor = Color.green;  
-    public Color m_ZeroHealthColor = Color.red;    
-
-    public GameObject m_ExplosionPrefab;            //爆炸预制体
-
+    public Image m_FillImage;                      //血条UI的颜色
+    public Color m_FullHealthColor = Color.green;  //满血颜色
+    public Color m_ZeroHealthColor = Color.red;    //残血颜色
 
     private AudioSource m_ExplosionAudio;
     private ParticleSystem m_ExplosionParticles;    //爆炸的例子特效
@@ -45,7 +42,10 @@ public class TankHealth : MonoBehaviour
     {
         // Adjust the tank's current health, update the UI based on the new health and check whether or not the tank is dead.
         m_CurrentHealth -= amount;
+
         Debug.Log(m_CurrentHealth);
+        SetHealthUI();
+
         if (m_CurrentHealth <= 0 && !m_Dead)
         {
             OnDeath();
@@ -56,6 +56,12 @@ public class TankHealth : MonoBehaviour
     private void SetHealthUI()
     {
         // Adjust the value and colour of the slider.
+        m_Slider.value = m_CurrentHealth;
+        //m_FillImage.color = Color.Lerp(m_ZeroHealthColor, m_FullHealthColor, m_CurrentHealth / m_StartingHealth);
+        if (m_CurrentHealth > 40)
+            m_FillImage.color = m_FullHealthColor;
+        else
+            m_FillImage.color = m_ZeroHealthColor;
     }
 
 
