@@ -43,15 +43,9 @@ public class MyShellExplosion : MonoBehaviour
             target.AddExplosionForce(ExplosionForce, transform.position, ExplosionRadius);
 
             //坦克扣血
-            float damage = CalculateDamage(target.transform.position);
+            float damage = CalculateDamage(targetCollider[i].ClosestPoint(transform.position));     //返回碰撞体表面离给定点最近的点
             TankHealth targetTankHealth= targetCollider[i].GetComponent<TankHealth>();
             targetTankHealth.TakeDamage(damage);
-        }
-        //击中坦克
-        if (other.tag == "Tank")
-        {
-            TankHealth tankHealth = other.GetComponent<TankHealth>();
-            tankHealth.TakeDamage(MaxDamage);
         }
 
         //炮弹的效果

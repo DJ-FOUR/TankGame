@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class MyTankShooting : MonoBehaviour
 {
-    public int PlayerNumber = 1; //Ì¹¿Ë±àºÅ
-    public GameObject FireTransform; //ÅÚµ¯Î»ÖÃ
-    public Rigidbody Shell; //ÅÚµ¯Ä£ĞÍ
-    public Slider AimSlider;
+    public int PlayerNumber = 1; //å¦å…‹ç¼–å·
+    public GameObject FireTransform; //ç‚®å¼¹ä½ç½®
+    public Rigidbody Shell; //ç‚®å¼¹æ¨¡å‹
+    public Slider AimSlider; //è“„åŠ›æ¡UI
     public AudioSource ShootingAudio;
     public AudioClip ChargingClip;
     public AudioClip FireClip;
@@ -21,7 +21,14 @@ public class MyTankShooting : MonoBehaviour
     private float ChargeSpeed;
     private float CurrentLaunchForce;
     private string FireButton;
-    private bool Fired; //¶ÌÊ±¼äÄÚÊÇ·ñ·¢Éä¹ı
+    private bool Fired; //çŸ­æ—¶é—´å†…æ˜¯å¦å‘å°„è¿‡
+
+    //æ¯æ¬¡å¯ç”¨æ—¶æŠŠè“„åŠ›æ¡é‡ç½®åˆ°æœ€å°åŠ›åº¦
+    void OnEnable()
+    {
+        CurrentLaunchForce = MinLaunchForce;
+        AimSlider.value = MinLaunchForce;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +42,8 @@ public class MyTankShooting : MonoBehaviour
         if (Input.GetButtonDown(FireButton)){
             Fired = false;
             CurrentLaunchForce = MinLaunchForce;
-            //²¥·ÅĞîÁ¦ÒôÆµ
+            AimSlider.value = MinLaunchForce;
+            //æ’­æ”¾è“„åŠ›éŸ³é¢‘
             ShootingAudio.clip = ChargingClip;
             ShootingAudio.Play();
         }
@@ -43,6 +51,7 @@ public class MyTankShooting : MonoBehaviour
         {
 
             CurrentLaunchForce += ChargeSpeed * Time.deltaTime;
+            AimSlider.value = CurrentLaunchForce; //è“„åŠ›æ¡è·Ÿéšå½“å‰åŠ›åº¦å¢é•¿
 
             if (CurrentLaunchForce >= MaxLaunchForce)
             {
@@ -58,14 +67,15 @@ public class MyTankShooting : MonoBehaviour
     void Fire()
     {
         Fired = true;
-
-        //·¢ÉäÒôÆµ
+        AimSlider.value = MinLaunchForce;
+        //å‘å°„éŸ³é¢‘
         Rigidbody gameObjectInstance = Instantiate(Shell, FireTransform.transform.position, FireTransform.transform.rotation) as Rigidbody;
-        Vector3 fwd = FireTransform.transform.forward; //ÅÚµ¯·¢Éä·½Ïò
+        Vector3 fwd = FireTransform.transform.forward; //ç‚®å¼¹å‘å°„æ–¹å‘
         gameObjectInstance.velocity = fwd * CurrentLaunchForce;
 
-        //²¥·Å·¢ÉäÒôÆµ
+        //æ’­æ”¾å‘å°„éŸ³é¢‘
         ShootingAudio.clip = FireClip;
         ShootingAudio.Play();
     }
+ 
 }
