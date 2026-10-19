@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//using System.Diagnostics;
+using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class CameraControl : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, m_DesiredPosition, ref m_MoveVelocity, m_DampTime);
     }
 
-
+    //寻找坦克之间的平均中心点m_DesiredPosition
     private void FindAveragePosition()
     {
         Vector3 averagePos = new Vector3();
@@ -68,7 +69,7 @@ public class CameraControl : MonoBehaviour
     private float FindRequiredSize()
     {
         Vector3 desiredLocalPos = transform.InverseTransformPoint(m_DesiredPosition);
-
+        Debug.Log("期望中心 世界=" + m_DesiredPosition + "  相机本地=" + desiredLocalPos);
         float size = 0f;
 
         for (int i = 0; i < m_Targets.Length; i++)
