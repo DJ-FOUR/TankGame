@@ -5,9 +5,9 @@ public class CameraControl : MonoBehaviour
 {
     public float m_DampTime = 0.2f;                 
     public float m_ScreenEdgeBuffer = 4f;           
-    public float m_MinSize = 6.5f;                  
-    public Transform[] m_Targets;
-    //[HideInInspector] 
+    public float m_MinSize = 6.5f;
+    [HideInInspector] public Transform[] m_Targets;
+
 
     private Camera m_Camera;                        
     private float m_ZoomSpeed;                      
@@ -69,7 +69,7 @@ public class CameraControl : MonoBehaviour
     private float FindRequiredSize()
     {
         Vector3 desiredLocalPos = transform.InverseTransformPoint(m_DesiredPosition);
-        Debug.Log("期望中心 世界=" + m_DesiredPosition + "  相机本地=" + desiredLocalPos);
+        //Debug.Log("期望中心 世界=" + m_DesiredPosition + "  相机本地=" + desiredLocalPos);
         float size = 0f;
 
         for (int i = 0; i < m_Targets.Length; i++)

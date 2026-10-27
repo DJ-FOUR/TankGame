@@ -12,19 +12,19 @@ public class TankManager
     [HideInInspector] public int m_Wins;                     
 
 
-    private TankMovement m_Movement;       
-    private TankShooting m_Shooting;
+    private MyTankMovement m_Movement;       
+    private MyTankShooting m_Shooting;
     private GameObject m_CanvasGameObject;
 
 
     public void Setup()
     {
-        m_Movement = m_Instance.GetComponent<TankMovement>();
-        m_Shooting = m_Instance.GetComponent<TankShooting>();
+        m_Movement = m_Instance.GetComponent<MyTankMovement>();
+        m_Shooting = m_Instance.GetComponent<MyTankShooting>();
         m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
 
-        m_Movement.m_PlayerNumber = m_PlayerNumber;
-        m_Shooting.m_PlayerNumber = m_PlayerNumber;
+        m_Movement.PlayerNumber = m_PlayerNumber;
+        m_Shooting.PlayerNumber = m_PlayerNumber;
 
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
@@ -60,6 +60,7 @@ public class TankManager
         m_Instance.transform.position = m_SpawnPoint.position;
         m_Instance.transform.rotation = m_SpawnPoint.rotation;
 
+        //执行组件里的OnEnable，在里面初速化
         m_Instance.SetActive(false);
         m_Instance.SetActive(true);
     }
