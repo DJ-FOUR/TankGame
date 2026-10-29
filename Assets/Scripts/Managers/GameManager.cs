@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public CameraControl m_CameraControl;   
     public Text m_MessageText;              
     public GameObject m_TankPrefab;         
-    public TankManager[] m_Tanks;           
+    public TankManager[] m_Tanks;           //场景中的坦克数组
 
 
     private int m_RoundNumber;              
@@ -25,44 +25,43 @@ public class GameManager : MonoBehaviour
     {
         m_StartWait = new WaitForSeconds(m_StartDelay);
         m_EndWait = new WaitForSeconds(m_EndDelay);
-
+        //生成坦克并初始化
         SpawnAllTanks();
+        //把坦克的坐标位置提供给相机
         SetCameraTargets();
 
         StartCoroutine(GameLoop()); //协程
     }
 
-
     private void SpawnAllTanks()
     {
         for (int i = 0; i < m_Tanks.Length; i++)
         {
+            //在point点上生成坦克预制体
             m_Tanks[i].m_Instance =
-                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
-            m_Tanks[i].m_PlayerNumber = i + 1;
+                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation);
+            m_Tanks[i].m_PlayerNumber = i + 1;      //给坦克编号
+            ////初始化坦克的玩家编号、玩家文本、坦克颜色
             m_Tanks[i].Setup();
         }
     }
-
-
     private void SetCameraTargets()
     {
+        //targets数组里面存放了每个坦克的transform组件
         Transform[] targets = new Transform[m_Tanks.Length];
-
         for (int i = 0; i < targets.Length; i++)
         {
             targets[i] = m_Tanks[i].m_Instance.transform;
         }
-
+        //把坦克坐标的集合给相机
         m_CameraControl.m_Targets = targets;
     }
 
-
     private IEnumerator GameLoop()
     {
-        yield return StartCoroutine(RoundStarting());
-        yield return StartCoroutine(RoundPlaying());
-        yield return StartCoroutine(RoundEnding());
+        yield return StartCoroutine(RoundStarting());   //回合开始
+        yield return StartCoroutine(RoundPlaying());    //对战中
+        yield return StartCoroutine(RoundEnding());     //回合结束
 
         if (m_GameWinner != null)
         {
@@ -70,18 +69,18 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GameLoop());
+            StartCoroutine(GameLoop());     //实现游戏循环
         }
     }
 
 
     private IEnumerator RoundStarting()
     {
-        ResetAllTanks();
-        DisableTankControl();
-        m_CameraControl.SetStartPositionAndSize();
-        m_RoundNumber++;
-        m_MessageText.text = "ROUND_" + m_RoundNumber; 
+        ResetAllTanks();                              // 所有坦克回出生点、状态复位
+        DisableTankControl();                         // 禁止玩家操作
+        m_CameraControl.SetStartPositionAndSize();     // 相机瞬移到初始取景
+        m_RoundNumber++;                              // 回合数 +1
+        m_MessageText.text = "ROUND_" + m_RoundNumber;  // 显示 "ROUND_n" 
 
         yield return m_StartWait;   //协程返回
     }
@@ -89,30 +88,30 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundPlaying()
     {
-        EnableTankControl();
-        m_MessageText.text = "";
-        while (!OneTankLeft())
+        EnableTankControl();                 // 允许玩家操作
+        m_MessageText.text = "";             // 清空提示文字
+        while (!OneTankLeft())               // 只要还有 ≥2 辆存活
         {
-            yield return null;
+            yield return null;               // 每帧检查一次
         }
-        yield return null;
+        yield return null;                   // 多等一帧再结算
     }
 
 
     private IEnumerator RoundEnding()
     {
-        DisableTankControl();
-        m_RoundWinner = null;
-        m_RoundWinner = GetRoundWinner();
-        if (m_RoundWinner != null)
+        DisableTankControl();                        // 禁止玩家操作
+        m_RoundWinner = null;                        // 先清空（默认平局）
+        m_RoundWinner = GetRoundWinner();            // 找唯一存活的坦克
+        if (m_RoundWinner != null)                   // 有人活下来（非平局）
         {
-            m_RoundWinner.m_Wins++;
+            m_RoundWinner.m_Wins++;                  // 赢家胜场 +1
         }
-        m_GameWinner = GetGameWinner();
-        string message = EndMessage();
-        m_MessageText.text = message;
+        m_GameWinner = GetGameWinner();              // 检查是否有人先到 5 胜
+        string message = EndMessage();               // 拼装结算文字
+        m_MessageText.text = message;                // 显示到屏幕
 
-        yield return m_EndWait;
+        yield return m_EndWait;                      // 暂停 3 秒展示结算
     }
 
 

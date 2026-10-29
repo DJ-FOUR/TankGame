@@ -6,7 +6,7 @@ public class CameraControl : MonoBehaviour
     public float m_DampTime = 0.2f;                 //相机运动所需时间
     public float m_ScreenEdgeBuffer = 4f;           //游戏画面边缘缓冲
     public float m_MinSize = 6.5f;                  //游戏画面最低尺寸
-    [HideInInspector] public Transform[] m_Targets;     //坦克集合
+    [HideInInspector] public Transform[] m_Targets;     //坦克位置的集合
 
 
     private Camera m_Camera;   
